@@ -78,7 +78,7 @@ export class CalculatorComponent implements OnInit, AfterViewInit {
     this.equations.push({
       expression: '',
       color: newColor,
-      visible: false
+      visible: true
     });
     this.showEquationsMenu = true;
   }
@@ -108,16 +108,6 @@ export class CalculatorComponent implements OnInit, AfterViewInit {
   toggleEquationVisibility(index: number) {
     this.equations[index].visible = !this.equations[index].visible;
     this.plotAllFunctions();
-  }
-
-  private validateFunction(expression: string): boolean {
-    try {
-      const scope = { x: 1 };
-      math.evaluate(expression, scope);
-      return true;
-    } catch (error) {
-      return false;
-    }
   }
 
   private plotAllFunctions() {

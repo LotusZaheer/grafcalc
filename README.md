@@ -69,3 +69,6 @@ Las contribuciones son bienvenidas. Por favor, abre un issue primero para discut
 ## Licencia
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+
+ng deploy --base-href=/grafcalc/ --no-silent
