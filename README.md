@@ -24,7 +24,7 @@ GrafCalc es una calculadora gráfica interactiva moderna construida con Angular 
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/tu-usuario/grafcalc.git
+git clone https://github.com/lotuszaheer/grafcalc.git
 cd grafcalc
 ```
 
