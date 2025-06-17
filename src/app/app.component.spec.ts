@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'calculadora-grafica' title`, () => {
+  it(`should have the 'grafcalc' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('calculadora-grafica');
+    expect(app.title).toEqual('grafcalc');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, calculadora-grafica');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, grafcalc');
   });
 });

@@ -29,6 +29,17 @@ export class CalculatorComponent implements OnInit, AfterViewInit {
   private offsetY: number = 0;
   private isCanvasReady: boolean = false;
   private resizeObserver: ResizeObserver | null = null;
+  private readonly ZOOM_FACTOR = 1.2;
+  private readonly MIN_SCALE = 10;
+  private readonly MAX_SCALE = 200;
+  showTooltip: boolean = false;
+  tooltipX: number = 0;
+  tooltipY: number = 0;
+  tooltipCoordinates = { x: 0, y: 0 };
+  private readonly POINT_RADIUS = 5; // Radio para detectar si el mouse está cerca de un punto
+  private isDragging: boolean = false;
+  private lastMouseX: number = 0;
+  private lastMouseY: number = 0;
 
   private readonly defaultColors = [
     '#00ff00', // Verde
@@ -171,6 +182,38 @@ export class CalculatorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  @HostListener('wheel', ['$event'])
+  onWheel(event: WheelEvent) {
+    if (event.ctrlKey) {
+      event.preventDefault();
+      if (event.deltaY < 0) {
+        this.zoomIn();
+      } else {
+        this.zoomOut();
+      }
+    }
+  }
+
+  zoomIn() {
+    if (this.scale < this.MAX_SCALE) {
+      this.scale *= this.ZOOM_FACTOR;
+      this.ngZone.runOutsideAngular(() => {
+        this.drawGrid();
+        this.plotAllFunctions();
+      });
+    }
+  }
+
+  zoomOut() {
+    if (this.scale > this.MIN_SCALE) {
+      this.scale /= this.ZOOM_FACTOR;
+      this.ngZone.runOutsideAngular(() => {
+        this.drawGrid();
+        this.plotAllFunctions();
+      });
+    }
+  }
+
   private setupResizeObserver() {
     if (!this.graphCanvas?.nativeElement) return;
 
@@ -252,20 +295,47 @@ export class CalculatorComponent implements OnInit, AfterViewInit {
     this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     this.ctx.lineWidth = 1;
 
-    // Líneas verticales
-    for (let x = -width / 2; x <= width / 2; x += this.scale) {
+    // Determinar el espaciado de las marcas según el zoom
+    const spacing = this.getGridSpacing();
+    const startX = Math.ceil(-width / (2 * this.scale) / spacing) * spacing;
+    const endX = Math.floor(width / (2 * this.scale) / spacing) * spacing;
+    const startY = Math.ceil(-height / (2 * this.scale) / spacing) * spacing;
+    const endY = Math.floor(height / (2 * this.scale) / spacing) * spacing;
+
+    // Líneas verticales y marcas en eje X
+    for (let x = startX; x <= endX; x += spacing) {
+      const canvasX = x * this.scale + this.offsetX;
+
+      // Línea de cuadrícula
       this.ctx.beginPath();
-      this.ctx.moveTo(x, -height / 2);
-      this.ctx.lineTo(x, height / 2);
+      this.ctx.moveTo(canvasX, -height / 2);
+      this.ctx.lineTo(canvasX, height / 2);
       this.ctx.stroke();
+
+      // Marca en eje X
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      this.ctx.font = '12px Arial';
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'top';
+      this.ctx.fillText(x.toString(), canvasX, 5);
     }
 
-    // Líneas horizontales
-    for (let y = -height / 2; y <= height / 2; y += this.scale) {
+    // Líneas horizontales y marcas en eje Y
+    for (let y = startY; y <= endY; y += spacing) {
+      const canvasY = -y * this.scale + this.offsetY;
+
+      // Línea de cuadrícula
       this.ctx.beginPath();
-      this.ctx.moveTo(-width / 2, y);
-      this.ctx.lineTo(width / 2, y);
+      this.ctx.moveTo(-width / 2, canvasY);
+      this.ctx.lineTo(width / 2, canvasY);
       this.ctx.stroke();
+
+      // Marca en eje Y
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      this.ctx.font = '12px Arial';
+      this.ctx.textAlign = 'right';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText(y.toString(), -5, canvasY);
     }
 
     // Ejes
@@ -283,5 +353,113 @@ export class CalculatorComponent implements OnInit, AfterViewInit {
     this.ctx.moveTo(0, -height / 2);
     this.ctx.lineTo(0, height / 2);
     this.ctx.stroke();
+  }
+
+  private getGridSpacing(): number {
+    // Ajustar el espaciado según el nivel de zoom
+    if (this.scale > 100) {
+      return 0.5; // Espaciado más pequeño para zoom alto
+    } else if (this.scale > 50) {
+      return 1;
+    } else if (this.scale > 25) {
+      return 2;
+    } else if (this.scale > 10) {
+      return 5;
+    } else {
+      return 10; // Espaciado más grande para zoom bajo
+    }
+  }
+
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(event: MouseEvent) {
+    if (event.button === 0) { // Solo botón izquierdo
+      this.isDragging = true;
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
+      this.graphCanvas.nativeElement.style.cursor = 'grabbing';
+    }
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (!this.isCanvasReady || !this.ctx) return;
+
+    const canvas = this.graphCanvas.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 2;
+    const y = event.clientY - rect.top - rect.height / 2;
+
+    if (this.isDragging) {
+      const deltaX = event.clientX - this.lastMouseX;
+      const deltaY = event.clientY - this.lastMouseY;
+
+      this.offsetX += deltaX;
+      this.offsetY += deltaY;
+
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
+
+      this.ngZone.runOutsideAngular(() => {
+        this.drawGrid();
+        this.plotAllFunctions();
+      });
+      return;
+    }
+
+    // Convertir coordenadas del canvas a coordenadas matemáticas
+    const mathX = (x - this.offsetX) / this.scale;
+    const mathY = -(y - this.offsetY) / this.scale;
+
+    // Verificar si el mouse está cerca de alguna línea
+    let isNearLine = false;
+    let closestY = 0;
+
+    for (const equation of this.equations) {
+      if (!equation.expression || equation.error || !equation.visible) continue;
+
+      try {
+        const scope = { x: mathX };
+        const yValue = math.evaluate(equation.expression, scope);
+        const canvasY = -yValue * this.scale + this.offsetY;
+
+        // Si el mouse está cerca de la línea
+        if (Math.abs(y - canvasY) < this.POINT_RADIUS) {
+          isNearLine = true;
+          closestY = yValue;
+          break;
+        }
+      } catch (error) {
+        console.error('Error al evaluar la función:', error);
+      }
+    }
+
+    if (isNearLine) {
+      this.showTooltip = true;
+      this.tooltipX = event.clientX;
+      this.tooltipY = event.clientY;
+      this.tooltipCoordinates = {
+        x: mathX,
+        y: closestY
+      };
+      canvas.style.cursor = 'crosshair';
+    } else {
+      this.showTooltip = false;
+      canvas.style.cursor = this.isDragging ? 'grabbing' : 'grab';
+    }
+  }
+
+  @HostListener('mouseup', ['$event'])
+  onMouseUp(event: MouseEvent) {
+    if (event.button === 0) { // Solo botón izquierdo
+      this.isDragging = false;
+      this.graphCanvas.nativeElement.style.cursor = 'grab';
+    }
+  }
+
+  @HostListener('mouseleave')
+  onMouseLeave() {
+    this.showTooltip = false;
+    this.isDragging = false;
+    this.graphCanvas.nativeElement.style.cursor = 'grab';
   }
 }

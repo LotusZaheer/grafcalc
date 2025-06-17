@@ -9,5 +9,5 @@ import { CalculatorComponent } from './calculator/calculator.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'calculadora-grafica';
+  title = 'grafcalc';
 }

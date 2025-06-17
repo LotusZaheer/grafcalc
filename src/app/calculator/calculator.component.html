@@ -35,6 +35,22 @@
         </div>
         <div class="canvas-container">
             <canvas #graphCanvas></canvas>
+            <div class="coordinates-tooltip" [style.left.px]="tooltipX" [style.top.px]="tooltipY" *ngIf="showTooltip">
+                x: {{ tooltipCoordinates.x.toFixed(2) }}
+                y: {{ tooltipCoordinates.y.toFixed(2) }}
+            </div>
+            <div class="zoom-controls">
+                <button class="btn btn-zoom" (click)="zoomIn()" title="Acercar (Ctrl + Rueda arriba)">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                    </svg>
+                </button>
+                <button class="btn btn-zoom" (click)="zoomOut()" title="Alejar (Ctrl + Rueda abajo)">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M19 13H5v-2h14v2z" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </div>
