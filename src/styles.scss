@@ -1,0 +1,189 @@
+/* You can add global styles to this file, and also import other style files */
+@use "sass:color";
+@use "./styles/_variables" as *;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: $background-dark;
+    color: $text-primary;
+    font-family: "Roboto", sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-size: $size-base;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: $size-4xl;
+}
+
+h2 {
+    font-size: $size-3xl;
+}
+
+h3 {
+    font-size: $size-2xl;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: $accent-color;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: $highlight-color;
+}
+
+.container {
+    margin: 0;
+}
+
+.section {
+    padding: 5rem 0;
+}
+
+.text-gradient {
+    background: $gradient-primary;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: moveGradient 3s linear infinite;
+}
+
+.text-gradient-highlight {
+    background: $gradient-highlight;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: moveGradient 3s linear infinite;
+}
+
+@keyframes moveGradient {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: -200% center;
+    }
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: $border-radius;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &-primary {
+        background-color: $primary-color;
+        color: $text-primary;
+
+        &:hover {
+            background-color: $secondary-color;
+            color: $text-primary;
+        }
+    }
+
+    &-accent {
+        background-color: $accent-color;
+        color: $text-primary;
+
+        &:hover {
+            background-color: $highlight-color;
+            color: $background-dark;
+        }
+    }
+
+    &-outline {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        border: 2px solid $accent-color;
+        color: $accent-color;
+
+        &:hover {
+            background-color: $accent-color;
+            color: $text-primary;
+        }
+    }
+}
+
+.card {
+    background-color: $background-card;
+    border-radius: $border-radius-card;
+    overflow: hidden;
+    box-shadow: $shadow-card;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: $shadow-card-hover;
+    }
+
+    &-body {
+        padding: 1.5rem;
+    }
+
+    &-title {
+        font-size: $size-xl;
+        margin-bottom: 1rem;
+    }
+
+    &-text {
+        color: $text-secondary;
+    }
+}
+
+
+////////////////// Scrollbar Styles //////////////////
+
+* {
+    scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.5);
+    border-radius: 4px;
+}

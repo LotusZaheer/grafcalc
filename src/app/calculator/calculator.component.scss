@@ -1,0 +1,325 @@
+@use '../../styles/variables' as *;
+
+.calculator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+    background-color: $background-dark;
+    overflow: hidden;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    margin: 0 auto;
+    border-radius: $border-radius-card;
+    box-shadow: $shadow-card;
+
+    &-display {
+        font-size: $size-3xl;
+        padding: $spacing-lg;
+        text-align: right;
+        background-color: $background-card;
+        border-bottom: $border-width $border-style rgba($text-primary, $opacity-10);
+        color: $text-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: $border-width;
+        background-color: rgba($text-primary, $opacity-10);
+
+        .btn {
+            padding: $spacing-lg;
+            font-size: $size-xl;
+            border-radius: 0;
+            height: 100%;
+            width: 100%;
+            transition: $transition-base;
+
+            &-accent {
+                background-color: $accent-color;
+                color: $text-primary;
+
+                &:hover {
+                    background-color: $highlight-color;
+                    color: $background-dark;
+                }
+            }
+
+            &-primary {
+                background-color: $background-dark-75;
+                color: $text-primary;
+
+                &:hover {
+                    background-color: $background-dark-95;
+                    color: $text-primary;
+                }
+            }
+
+            &-outline {
+                background-color: $background-card;
+                color: $accent-color;
+                border: none;
+
+                &:hover {
+                    background-color: $accent-color;
+                    color: $text-primary;
+                }
+            }
+        }
+    }
+}
+
+.graph-container {
+    height: 100%;
+    width: 100%;
+    background-color: $background-dark;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.function-input {
+    position: absolute;
+    top: $spacing-xl;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    padding: $spacing-lg;
+    background-color: $background-card;
+    border-radius: $border-radius-card;
+    box-shadow: $shadow-card;
+    z-index: $z-index-dropdown;
+}
+
+.equations-menu {
+    position: relative;
+    width: 100%;
+}
+
+.btn-menu {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-md $spacing-lg;
+    background-color: $background-dark-75;
+    border: $border-width $border-style rgba($text-primary, $opacity-10);
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: $transition-base;
+    color: $text-primary;
+
+    &:hover {
+        background-color: $background-dark-95;
+    }
+
+    .menu-icon {
+        font-size: $size-xl;
+        margin-right: $spacing-md;
+    }
+
+    .menu-text {
+        flex-grow: 1;
+        text-align: left;
+    }
+}
+
+.equations-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: $background-card;
+    border: $border-width $border-style rgba($text-primary, $opacity-10);
+    border-radius: $border-radius;
+    margin-top: $spacing-xs;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: $z-index-dropdown;
+
+    &.show {
+        display: block;
+    }
+}
+
+.equation-item {
+    padding: $spacing-md;
+    border-bottom: $border-width $border-style rgba($text-primary, $opacity-10);
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.equation-controls {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+}
+
+input[type="color"] {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    background-color: $background-dark-75;
+}
+
+.btn-visibility {
+    padding: $spacing-xs;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    transition: $transition-base;
+
+    &:hover {
+        color: $text-primary;
+    }
+
+    .eye-icon {
+        fill: currentColor;
+        transition: $transition-base;
+
+        .strike {
+            stroke: currentColor;
+            stroke-width: 2;
+            opacity: 0;
+            transition: $transition-base;
+        }
+
+        &:not(.visible) .strike {
+            opacity: 1;
+        }
+    }
+}
+
+.function-input-field {
+    flex-grow: 1;
+    padding: $spacing-sm $spacing-md;
+    background-color: $background-dark-75;
+    border: $border-width $border-style rgba($text-primary, $opacity-10);
+    border-radius: $border-radius;
+    font-size: $size-base;
+    transition: $transition-base;
+    color: $text-primary;
+
+    &::placeholder {
+        color: $text-secondary;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $accent-color;
+        box-shadow: 0 0 0 2px rgba($accent-color, $opacity-25);
+    }
+
+    &.error {
+        border-color: $error-color;
+        animation: shake 0.5s ease-in-out;
+    }
+}
+
+.btn-delete {
+    padding: $spacing-xs $spacing-md;
+    background: none;
+    border: none;
+    color: $error-color;
+    cursor: pointer;
+    font-size: $size-lg;
+    transition: $transition-base;
+
+    &:hover {
+        color: lighten($error-color, 10%);
+        transform: scale(1.1);
+    }
+}
+
+.btn-add {
+    width: 100%;
+    padding: $spacing-md;
+    background-color: $background-dark-75;
+    border: $border-width $border-style-dashed rgba($text-primary, $opacity-10);
+    border-radius: $border-radius;
+    color: $text-secondary;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+        background-color: $background-dark-95;
+        color: $text-primary;
+    }
+}
+
+.error-message {
+    color: $error-color;
+    margin-top: $spacing-md;
+    padding: $spacing-sm;
+    background-color: rgba($error-color, $opacity-10);
+    border-radius: $border-radius;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.canvas-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: $background-dark;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

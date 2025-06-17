@@ -1,0 +1,40 @@
+<div class="calculator-container">
+    <div class="graph-container card">
+        <div class="function-input card-body">
+            <div class="equations-menu">
+                <button class="btn btn-menu" (click)="toggleEquationsMenu()">
+                    <span class="menu-icon">≡</span>
+                    <span class="menu-text">Ecuaciones ({{ equations.length }})</span>
+                </button>
+                <div class="equations-list" [class.show]="showEquationsMenu">
+                    <div class="equation-item" *ngFor="let eq of equations; let i = index">
+                        <div class="equation-controls">
+                            <input type="color" [(ngModel)]="eq.color" (change)="updateEquation(i)">
+                            <button class="btn btn-visibility" (click)="toggleEquationVisibility(i)"
+                                [title]="eq.visible ? 'Ocultar ecuación' : 'Mostrar ecuación'">
+                                <svg class="eye-icon" [class.visible]="eq.visible" viewBox="0 0 24 24" width="24"
+                                    height="24">
+                                    <path
+                                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                    <path class="strike" d="M2 2l20 20" />
+                                </svg>
+                            </button>
+                            <button class="btn btn-delete" (click)="deleteEquation(i)">×</button>
+                        </div>
+                        <input type="text" [(ngModel)]="eq.expression" placeholder="Ingresa una función"
+                            class="function-input-field" [class.error]="eq.error" (keyup.enter)="updateEquation(i)">
+                    </div>
+                    <button class="btn btn-add" (click)="addEquation()">
+                        + Agregar ecuación
+                    </button>
+                </div>
+            </div>
+            <div class="error-message" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas #graphCanvas></canvas>
+        </div>
+    </div>
+</div>
