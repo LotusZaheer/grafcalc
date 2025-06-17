@@ -2,7 +2,7 @@
 export default {
   bootstrap: () => import('./main.server.mjs').then(m => m.default),
   inlineCriticalCss: true,
-  baseHref: '/grafcalc/',
+  baseHref: 'https://LotusZaheer.github.io/grafcalc/',
   locale: undefined,
   routes: [
   {
@@ -12,9 +12,9 @@ export default {
 ],
   entryPointToBrowserMapping: undefined,
   assets: {
-    'index.csr.html': {size: 20552, hash: 'a59a7d7cdc47998f5bf91a2359d4e4fc0c4ffa39214469132a748f37c00ed6ce', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
-    'index.server.html': {size: 1024, hash: 'e0debeee2b8f62390c474c551a91045209b5748be5173cde7764951420cc8b0e', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
-    'index.html': {size: 34216, hash: 'c2b72ccbb4e1a0bf6c91d9c1f8d03f17989ad7b1f18fc57d525cd6ed3d8ccdcc', text: () => import('./assets-chunks/index_html.mjs').then(m => m.default)},
+    'index.csr.html': {size: 20581, hash: 'a088190ee8dc1ed6d8b4383d5805493529b98d68c816db6e0a3af562652242b1', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
+    'index.server.html': {size: 1053, hash: '01a6ed0b48c7ea9686f3805625227ae678c8070c743b10fd21eea9f65b66d21f', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
+    'index.html': {size: 34245, hash: 'd177db5df6328d29982e8148832275dd98377baca108540c02143a65b5015243', text: () => import('./assets-chunks/index_html.mjs').then(m => m.default)},
     'styles-COVNJEGA.css': {size: 21630, hash: 'l1qjRFS/9bI', text: () => import('./assets-chunks/styles-COVNJEGA_css.mjs').then(m => m.default)}
   },
 };

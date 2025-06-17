@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/grafcalc',
+  basePath: 'https://LotusZaheer.github.io/grafcalc',
   supportedLocales: {
   "en-US": ""
 },
