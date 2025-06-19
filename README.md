@@ -1,6 +1,6 @@
-# GrafCalc
+# GrafCalc Angular
 
-GrafCalc es una calculadora gráfica interactiva moderna construida con Angular que permite visualizar funciones matemáticas en tiempo real.
+GrafCalc Angular es una calculadora gráfica interactiva moderna construida con Angular que permite visualizar funciones matemáticas en tiempo real.
 
 ## Características
 
@@ -24,8 +24,8 @@ GrafCalc es una calculadora gráfica interactiva moderna construida con Angular 
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/lotuszaheer/grafcalc.git
-cd grafcalc
+git clone https://github.com/LotusZaheer/grafcalc-angular.git
+cd grafcalc-angular
 ```
 
 2. Instala las dependencias:
@@ -70,5 +70,6 @@ Las contribuciones son bienvenidas. Por favor, abre un issue primero para discut
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
+---
 
-ng deploy --base-href=/grafcalc/ --no-silent
+Repositorio oficial: https://github.com/LotusZaheer/grafcalc-angular.git
